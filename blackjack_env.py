@@ -13,6 +13,9 @@ class Blackjack:
         self.reward_dict = self.card_value_dict()
         self.player_hands = [self.deck.pop(0), self.deck.pop(0)]
 
+        self.possible_state = [i for i in range(2, 22)]
+        self.possible_action = {0: 'h', 1: 's'}
+
         self.total_reward = 0
         self.episode_id = 1
 
@@ -89,7 +92,35 @@ class Blackjack:
                 is_done = True
 
         self.total_reward += current_reward
-        return self.player_hands, current_reward, is_done
+        deck_value = self.calculate_deck_total_value(self.player_hands, self.reward_dict)
+        return deck_value, current_reward, is_done
+
+    # def step(self, action):
+    #     current_reward = 0
+    #     is_done = False
+    #     new_round = False
+    #
+    #     if action is 'h':
+    #         if len(self.deck) > 0:
+    #             self.player_hands.append(self.deck.pop(0))
+    #             if self.calculate_deck_total_value(self.player_hands, self.reward_dict) > 21:
+    #                 new_round = True
+    #     elif action is 's':
+    #         new_round = True
+    #
+    #     if new_round is True:
+    #         current_reward += self.calculate_reward(self.player_hands, self.reward_dict)
+    #         if len(self.deck) >= 2:
+    #             self.player_hands = [self.deck.pop(0), self.deck.pop(0)]
+    #         else:
+    #             is_done = True
+    #     else:
+    #         if len(self.deck) is 0:
+    #             current_reward += self.calculate_reward(self.player_hands, self.reward_dict)
+    #             is_done = True
+    #
+    #     self.total_reward += current_reward
+    #     return self.player_hands, current_reward, is_done
 
     def reset(self):
         self.deck = self.create_D_deck(self.poker_card, self.deck_number)
@@ -97,6 +128,12 @@ class Blackjack:
         self.player_hands = [self.deck.pop(0), self.deck.pop(0)]
         self.total_reward = 0
         self.episode_id += 1
+
+    def return_current_state(self):
+        return self.calculate_deck_total_value(self.player_hands, self.reward_dict)
+
+    def return_state_id(self, state):
+        return self.possible_state.index(state)
 
 
 if __name__ == '__main__':
