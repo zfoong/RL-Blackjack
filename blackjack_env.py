@@ -3,23 +3,19 @@ import numpy as np
 
 class Blackjack:
     def __init__(self, deck_number=1):
+        self.episode_id = 1
         self.deck_number = deck_number
         self.suits = ['club', 'diamond', 'heart', 'spade']
         self.ranks = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven',
                       'eight', 'nine', 'ten', 'jack', 'queen', 'king']
-
         self.poker_card = self.create_a_deck()
         self.deck = self.create_D_deck(self.poker_card, self.deck_number)
         self.reward_dict = self.card_value_dict()
         self.player_hands = [self.deck.pop(0), self.deck.pop(0)]
-
-        self.possible_state = [i for i in range(2, 22)]
-        self.possible_action = {0: 'h', 1: 's'}
-
         self.total_reward = 0
-        self.episode_id = 1
 
     def shuffle_deck(self, deck):
+        np.random.seed(self.episode_id)
         np.random.shuffle(deck)
         return deck
 
@@ -131,9 +127,6 @@ class Blackjack:
 
     def return_current_state(self):
         return self.calculate_deck_total_value(self.player_hands, self.reward_dict)
-
-    def return_state_id(self, state):
-        return self.possible_state.index(state)
 
 
 if __name__ == '__main__':
