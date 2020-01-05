@@ -67,29 +67,31 @@ class Blackjack:
         current_reward = 0
         is_done = False
         new_round = False
+        over_21 = False
 
         if action is 'h':
             if len(self.deck) > 0:
                 self.player_hands.append(self.deck.pop(0))
                 if self.calculate_deck_total_value(self.player_hands, self.reward_dict) > 21:
                     new_round = True
+                    over_21 = True
         elif action is 's':
             new_round = True
 
         if new_round is True:
-            current_reward += self.calculate_reward(self.player_hands, self.reward_dict)
+            current_reward = self.calculate_reward(self.player_hands, self.reward_dict)
             if len(self.deck) >= 2:
                 self.player_hands = [self.deck.pop(0), self.deck.pop(0)]
             else:
                 is_done = True
         else:
             if len(self.deck) is 0:
-                current_reward += self.calculate_reward(self.player_hands, self.reward_dict)
+                current_reward = self.calculate_reward(self.player_hands, self.reward_dict)
                 is_done = True
 
         self.total_reward += current_reward
         deck_value = self.calculate_deck_total_value(self.player_hands, self.reward_dict)
-        return deck_value, current_reward, is_done
+        return deck_value, current_reward, is_done, new_round
 
     # def step(self, action):
     #     current_reward = 0
