@@ -10,6 +10,13 @@ ranks = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven',
               'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 
 
+test = [99,1,2,3,4,5]
+test.append(6)
+print(test)
+kkk = random.sample(test, 2)
+print(kkk)
+
+
 # def create_a_deck():
 #     deck = []
 #     for i in ranks:
@@ -23,16 +30,16 @@ ranks = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven',
 #
 # print("")
 
-Q_table = np.load('q_table_q.npy')
-df = pd.DataFrame(np.zeros((20, 5)), columns=possible_dis, index=possible_state)
-
-for val_index, i in enumerate(possible_state):
-    for dis_index, j in enumerate(possible_dis):
-        df[j][i] = possible_action[np.argmax(Q_table[val_index, dis_index, :])]
-
-print(Q_table)
-
-print(df)
+# Q_table = np.load('q_table_q.npy')
+# df = pd.DataFrame(np.zeros((20, 5)), columns=possible_dis, index=possible_state)
+#
+# for val_index, i in enumerate(possible_state):
+#     for dis_index, j in enumerate(possible_dis):
+#         df[j][i] = possible_action[np.argmax(Q_table[val_index, dis_index, :])]
+#
+# print(Q_table)
+#
+# print(df)
 
 # def calculate_deck_current_distribution(num_low_cards, num_high_cards):
 #     difference_threshold = 4

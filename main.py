@@ -1,6 +1,6 @@
 import numpy as np
 from blackjack_env import Blackjack as env
-from agent_q_extend import Agent_Q_extend as ag_q_extend
+from agent_q_extend import Agent_Q_Extend as ag_q_extend
 from agent_rule_based import Agent_rule_based as ag_rule_based
 from agent_q import Agent_Q as ag_q
 import matplotlib.pyplot as plt
@@ -41,28 +41,27 @@ def print_q_table(path):
 
 def agent_Q_extend():
     """
-    Running Agent Q which implemented Q-learning with extend capability on Blackjack environment
+    Running Agent Q with Q-learning with extra capability on Blackjack environment
     :return: list of reward on each episode
     """
-    blackjack = env(deck_number)  # initiate environment
-    agent = ag_q_extend(1, 0.2, 0.2, 0.01)  # initiate Agent Q Extend
+    blackjack = env(deck_number)
+    agent = ag_q_extend(1, 0.2, 0.2, 0.01)
     reward_list = []
 
     for i in range(num_episode):
-        current_state = blackjack.return_current_state()  # starting of new episode, return initial state of environment
+        current_state = blackjack.return_current_state()
         while True:
-            action = agent.return_action(current_state)  # agent perform action
-            new_state, reward, is_done, new_round = blackjack.step(action)  # new state, reward return from environment
-            if is_done is True:  # episode end when all cards are distributed
+            action = agent.return_action(current_state)
+            new_state, reward, is_done, new_round = blackjack.step(action)
+            if is_done is True:
                 break
-            agent.add_sub_episode_buffer(current_state, action, reward, new_state)  # adding state to sub episode buffer
-            if new_round is True:
-                # when new set of card are drawn, update state-action pair based on sub episode buffer
-                agent.train_sub_episode_buffer()
+            agent.update_Q_table(current_state, action, reward, new_state, new_round)  # update state-action pair
+            agent.add_replay_buffer(current_state, action, reward, new_state, new_round)
+            agent.train_replay_buffer()
             current_state = new_state
         reward_list.append(blackjack.total_reward)
-        agent.update_epsilon_decay(i)  # update agent epsilon
-        blackjack.reset()  # reset Blackjack environment
+        agent.update_epsilon_decay(i)
+        blackjack.reset()
     agent.save_Q_table('q_table_q_extend.npy')
     print("last reward for Agent Q Extend is {}".format(reward_list[-1]))
     return reward_list
@@ -74,7 +73,7 @@ def agent_Q():
     :return: list of reward on each episode
     """
     blackjack = env(deck_number)
-    agent = ag_q(1, 0.2, 0.99, 0.01)
+    agent = ag_q(1, 0.2, 0.2, 0.01)
     reward_list = []
 
     for i in range(num_episode):
