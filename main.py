@@ -6,7 +6,7 @@ from agent_q import Agent_Q as ag_q
 import matplotlib.pyplot as plt
 import pandas as pd
 
-deck_number = 10  # number of deck shuffle together
+deck_number = 5  # number of deck shuffle together
 num_episode = 1000  # number of episode
 
 
@@ -44,24 +44,24 @@ def agent_Q_extend():
     Running Agent Q with Q-learning with extra capability on Blackjack environment
     :return: list of reward on each episode
     """
-    blackjack = env(deck_number)
-    agent = ag_q_extend(1, 0.2, 0.2, 0.01)
+    blackjack = env(deck_number)  # initiate environment
+    agent = ag_q_extend(1, 0.2, 0.2, 10)  # initiate Agent Q Extend
     reward_list = []
 
     for i in range(num_episode):
-        current_state = blackjack.return_current_state()
+        current_state = blackjack.return_current_state()  # starting of new episode, return initial state of environment
         while True:
-            action = agent.return_action(current_state)
-            new_state, reward, is_done, new_round = blackjack.step(action)
-            if is_done is True:
+            action = agent.return_action(current_state)  # agent perform action
+            new_state, reward, is_done, new_round = blackjack.step(action)  # new state, reward return from environment
+            if is_done is True:  # episode end when all cards are distributed
                 break
             agent.update_Q_table(current_state, action, reward, new_state, new_round)  # update state-action pair
-            agent.add_replay_buffer(current_state, action, reward, new_state, new_round)
-            agent.train_replay_buffer()
+            agent.add_replay_buffer(current_state, action, reward, new_state, new_round)  # adding data to replay buffer
+            agent.train_replay_buffer()  # agent sampling and train on old experiences
             current_state = new_state
         reward_list.append(blackjack.total_reward)
-        agent.update_epsilon_decay(i)
-        blackjack.reset()
+        agent.update_epsilon_decay(i, num_episode)  # update agent epsilon
+        blackjack.reset()  # reset Blackjack environment
     agent.save_Q_table('q_table_q_extend.npy')
     print("last reward for Agent Q Extend is {}".format(reward_list[-1]))
     return reward_list

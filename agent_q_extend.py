@@ -14,7 +14,7 @@ class Agent_Q_Extend:
         self.learning_rate = learning_rate  # learning rate
         self.discount_factor = discount_factor  # discount factor of next state
         self.possible_card_val = [i for i in range(2, 22)]
-        self.possible_action = ['h', 's']
+        self.possible_action = ['h', 's'] # 'h' for Hit and 's' for Stick action
         self.possible_card_distribution = ['excessive low cards', 'more low cards', 'same amount',
                                            'more high cards', 'excessive high cards']
         self.Q_table = np.zeros((20, 5, 2))
@@ -81,11 +81,11 @@ class Agent_Q_Extend:
         else:
             return self.possible_action[np.argmax(self.Q_table[val_index, dis_index, :])]
 
-    def update_epsilon_decay(self, episode):
+    def update_epsilon_decay(self, episode, total_episode):
         """
         Decrease exploration factor each episode
         """
-        self.epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon) * np.exp(-self.epsilon_decay * episode)
+        self.epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon) * np.exp(-self.epsilon_decay * episode / total_episode)
 
     def save_Q_table(self, path):
         """

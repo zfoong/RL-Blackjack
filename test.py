@@ -10,11 +10,10 @@ ranks = ['ace', 'two', 'three', 'four', 'five', 'six', 'seven',
               'eight', 'nine', 'ten', 'jack', 'queen', 'king']
 
 
-test = [99,1,2,3,4,5]
-test.append(6)
-print(test)
-kkk = random.sample(test, 2)
-print(kkk)
+import math
+
+ans = 2 * math.exp(2)
+print(ans)
 
 
 # def create_a_deck():
