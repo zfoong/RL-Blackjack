@@ -58,7 +58,7 @@ Below table shows mean of total reward of each episode from test episodes:
 | *AG<sub>Q</sub>* | 28160 |
 | *AG<sub>rule_based</sub>* | 31422 |
 
-Q-table of *AG<sub>Q_Extend</sub>* (left) and Q-table of *AG<sub>Q</sub>* (right) at the end of the training below
+Q-table of *AG<sub>Q_Extend</sub>* (left) and Q-table of *AG<sub>Q</sub>* (right) at the end of the training below:
 
-<img src="q_table_q_extend.PNG" width="350">
-<img src="q_table_q.PNG" width="350">
+<img src="q_table_q_extend.PNG" width="250">
+<img src="q_table_q.PNG" width="250">
