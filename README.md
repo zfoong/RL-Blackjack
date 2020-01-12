@@ -43,7 +43,7 @@ Running *blackjack_env.py* to play stylised Blackjack without agent.
 
 [Note]  
 *AG<sub>Q_Extend</sub>* is Q-learning agent with extend capabilities  
-*AG<sub>Q</sub>* is Q-learning agent without the capability of divided episode and experience replay
+*AG<sub>Q</sub>* is Q-learning agent without the capability of divided episode and experience replay  
 *AG<sub>rule_based</sub>* is a rule-based agent  
 
 Below are a graph showing the reward gained from our agents on every episode:
@@ -60,5 +60,7 @@ Below table shows mean of total reward of each episode from test episodes:
 
 Q-table of *AG<sub>Q_Extend</sub>* (left) and Q-table of *AG<sub>Q</sub>* (right) at the end of the training below:
 
-<img src="q_table_q_extend.PNG" width="250">
-<img src="q_table_q.PNG" width="250">
+<div class="row">
+<img src="q_table_q_extend.PNG" width="350">
+<img src="q_table_q.PNG" width="350">
+</div>
