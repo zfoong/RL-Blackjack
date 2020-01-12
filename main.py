@@ -1,3 +1,14 @@
+"""
+Author : Tham Yik Foong
+Student ID : 20200786
+Project title : Playing Stylised Blackjack with Q-learning
+
+Academic integrity statement :
+I, Tham Yik Foong, have read and understood the School's Academic Integrity Policy, as well as guidance relating to
+this module, and confirm that this submission complies with the policy. The content of this file is my own original
+work, with any significant material copied or adapted from other sources clearly indicated and attributed.
+"""
+
 import numpy as np
 from blackjack_env import Blackjack as env
 from agent_q_extend import Agent_Q_Extend as ag_q_extend
@@ -10,23 +21,27 @@ deck_number = 5  # number of deck shuffle together
 num_episode = 1000  # number of episode
 
 
-def plot_result(reward_lists):
+def plot_result(reward_tuples):
     """
     plotting rewards agent got on each episode
     """
-    for reward_list in reward_lists:
-        plt.plot(reward_list)
+    for index, reward_tuples in enumerate(reward_tuples):
+        name, reward_list = reward_tuples
+        plt.plot(reward_list, label=name)
     plt.title("Reward on each episode")
+    plt.legend()
+    plt.ylabel("Reward")
+    plt.xlabel("Episode")
     plt.savefig("{}.png".format("Reward on each episode"))
     plt.show()
     plt.close()
 
 
-def print_q_table(path):
+def print_q_table(np_path, csv_path):
     """
     printing Q table of agent showing greedy action agent will take on each state
     """
-    Q_table = np.load(path)
+    Q_table = np.load(np_path)
     possible_state = [i for i in range(2, 22)]
     possible_action = ['h', 's']
     possible_dis = ['e low cards', 'more low cards', 'same amount', 'more high cards', 'e high cards']
@@ -37,6 +52,7 @@ def print_q_table(path):
             pd_Q_table[j][i] = possible_action[np.argmax(Q_table[val_index, dis_index, :])]
 
     print(pd_Q_table)
+    pd_Q_table.to_csv(csv_path)
 
 
 def agent_Q_extend():
@@ -63,7 +79,8 @@ def agent_Q_extend():
         agent.update_epsilon_decay(i, num_episode)  # update agent epsilon
         blackjack.reset()  # reset Blackjack environment
     agent.save_Q_table('q_table_q_extend.npy')
-    print("last reward for Agent Q Extend is {}".format(reward_list[-1]))
+    mean_total_reward = np.ceil(np.mean(reward_list[-101:-1]))
+    print("Mean of total reward of the last 100 episodes for Agent Q Extend is {}".format(mean_total_reward))
     return reward_list
 
 
@@ -73,7 +90,7 @@ def agent_Q():
     :return: list of reward on each episode
     """
     blackjack = env(deck_number)
-    agent = ag_q(1, 0.2, 0.2, 0.01)
+    agent = ag_q(1, 0.2, 1, 10)
     reward_list = []
 
     for i in range(num_episode):
@@ -86,10 +103,11 @@ def agent_Q():
             agent.update_Q_table(current_state, action, reward, new_state)  # update state-action pair
             current_state = new_state
         reward_list.append(blackjack.total_reward)
-        agent.update_epsilon_decay(i)
+        agent.update_epsilon_decay(i, num_episode)
         blackjack.reset()
     agent.save_Q_table('q_table_q.npy')
-    print("last reward for Agent Q is {}".format(reward_list[-1]))
+    mean_total_reward = np.ceil(np.mean(reward_list[-101:-1]))
+    print("Mean of total reward of the last 100 episodes for Agent Q is {}".format(mean_total_reward))
     return reward_list
 
 
@@ -113,7 +131,8 @@ def agent_rule_based():
             current_state = new_state
         reward_list.append(blackjack.total_reward)
         blackjack.reset()
-    print("last reward for Agent rule based is {}".format(reward_list[-1]))
+    mean_total_reward = np.ceil(np.mean(reward_list[-101:-1]))
+    print("Mean of total reward of the last 100 episodes for Agent rule based is {}".format(mean_total_reward))
     return reward_list
 
 
@@ -121,5 +140,10 @@ if __name__ == '__main__':
     agent_q_extend_rl = agent_Q_extend()  # training Agent Q Extend
     agent_q_rl = agent_Q()  # training Agent Q
     agent_rule_based_rl = agent_rule_based()  # training Agent rule based
-    plot_result([agent_q_extend_rl, agent_q_rl, agent_rule_based_rl])  # plot agent's rewards on each episode
-    print_q_table("q_table_q_extend.npy")  # print Q table of agent showing greedy action agent will take on each state
+    reward_tuples = [('$AG_{Q\_Extend}$', agent_q_extend_rl),
+                     ('$AG_{Q}$', agent_q_rl),
+                     ('$AG_{rule\_based}$', agent_rule_based_rl)]
+    plot_result(reward_tuples)  # plot agent's rewards on each episode
+    # print Q table of agent showing greedy action agent will take on each state
+    print_q_table("q_table_q_extend.npy", "Q_table_q_extend.csv")
+    print_q_table("q_table_q.npy", "Q_table_q.csv")

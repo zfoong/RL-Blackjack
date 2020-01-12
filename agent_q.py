@@ -1,3 +1,14 @@
+"""
+Author : Tham Yik Foong
+Student ID : 20200786
+Project title : Playing Stylised Blackjack with Q-learning
+
+Academic integrity statement :
+I, Tham Yik Foong, have read and understood the School's Academic Integrity Policy, as well as guidance relating to
+this module, and confirm that this submission complies with the policy. The content of this file is my own original
+work, with any significant material copied or adapted from other sources clearly indicated and attributed.
+"""
+
 import numpy as np
 import random
 
@@ -41,8 +52,8 @@ class Agent_Q:
         else:
             return self.possible_action[np.argmax(self.Q_table[val_index, dis_index, :])]
 
-    def update_epsilon_decay(self, episode):
-        self.epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon) * np.exp(-self.epsilon_decay * episode)
+    def update_epsilon_decay(self, episode, total_episode):
+        self.epsilon = self.min_epsilon + (self.max_epsilon - self.min_epsilon) * np.exp(-self.epsilon_decay * episode / total_episode)
 
     def save_Q_table(self, path):
         np.save(path, self.Q_table)
