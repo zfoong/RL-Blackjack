@@ -16,7 +16,7 @@ This project address the task assigned to train an agent to play a stylised vers
 
 To compare the performance, we compare our agent with a Q-learning agent without extra capabilities and a rule-based agent. We discover that even our agent can perform better than a basic Q-learning agent, but it only performs equally as a rule-based agent.
 
-Paper included for implementation details.
+[Paper](https://github.com/zfoong/RL-Blackjack/blob/master/RL_Blacjack_Project_and_Paper_B3.pdf) included for implementation details.
 
 ## Project setting
 
