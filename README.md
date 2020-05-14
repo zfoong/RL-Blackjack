@@ -1,8 +1,8 @@
 # RL-Blackjack
 
-## Group Information
+## Author Information
 
-Name : Tham Yik Foong (20200786) and Qi Fang Rui
+Name : Tham Yik Foong (20200786)
 
 Course : Machine Learning in Science MSC
 
